@@ -24,7 +24,6 @@
         </record>
 
         
-        <menuitem id="courses_menu" name="Courses" action="course_form_view"/>
         
 
         <record model="ir.ui.view" id="course_search_view">
