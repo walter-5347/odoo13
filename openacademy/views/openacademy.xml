@@ -39,6 +39,6 @@
         </record>
 
         
-        <menuitem id="courses_menu" name="Courses" action="course_search_view"/>
+        
         
 </odoo>
