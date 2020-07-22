@@ -6,9 +6,10 @@ class Session(models.Model):
     _description = "OpenAcademy Sessions"
 
     name = fields.Char(required=True)
-    start_date = fields.Date()
+    start_date = fields.Date(default=fields.Date.today) # el argumento es el cambio
     duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(string="Number of seats")
+    active = fields.Boolean(default=True) # esta linea es el cambio 
 
     instructor_id = fields.Many2one('res.partner', string="Instructor",
         domain=['|', ('instructor', '=', True), ('category_id.name', 'ilike', "Teacher")])
@@ -16,7 +17,6 @@ class Session(models.Model):
         ondelete='cascade', string="Course", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees")
 
-    # apartir de aqui hay cambios
     taken_seats = fields.Float(string="Taken seats", compute='_taken_seats')
 
     @api.depends('seats', 'attendee_ids')
