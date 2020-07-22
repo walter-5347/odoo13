@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions #se agrego exceptions
 
 class Session(models.Model):
     _name = 'openacademy.session'
@@ -27,7 +27,7 @@ class Session(models.Model):
             else:
                 r.taken_seats = 100.0 * len(r.attendee_ids) / r.seats
 
-    # a partir de aqui se agrego codigo 
+    
     @api.onchange('seats', 'attendee_ids')
     def _verify_valid_seats(self):
         if self.seats < 0:
@@ -44,3 +44,10 @@ class Session(models.Model):
                     'message': "Increase seats or remove excess attendees",
                 },
             }
+
+    # a partir de aqui se agrego codigo 
+    @api.constrains('instructor_id', 'attendee_ids')
+    def _check_instructor_not_in_attendees(self):
+        for r in self:
+            if r.instructor_id and r.instructor_id in r.attendee_ids:
+                raise exceptions.ValidationError("A session's instructor can't be an attendee")
